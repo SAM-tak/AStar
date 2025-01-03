@@ -1,8 +1,6 @@
-A 2D A* (A Star) algorithm for C#
-=====
+# A 2D A* (A Star) algorithm for Unity C\#
 
-![Travis (.com) branch](https://img.shields.io/travis/com/valantonini/AStar/master?style=for-the-badge)
-[![NuGet](https://img.shields.io/nuget/v/AStarLite.svg?style=for-the-badge)](https://www.nuget.org/packages/AStarLite/)
+**This is Unity version.** [Origin](https://github.com/valantonini/AStar)
 
 The world is represented by a WorldGrid that is essentially a matrix of the C# short data type.
 A value of 0 indicates the cell is closed / blocked. Any other number indicates the cell is open and traversable.
@@ -11,16 +9,16 @@ priority to movement through those nodes in the future.
 
 The WorldGrid can be indexed via either:
 
-1) The provided Position struct where a row represents the vertical axis and column the horizontal axis 
+1) The provided Position struct where a row represents the vertical axis and column the horizontal axis
    (Similar to indexing into a matrix P<sub>rc</sub>).
-   
-2) The C# Point struct that operates like a cartesian co-ordinate system where 
+
+2) The C# Point struct that operates like a cartesian co-ordinate system where
    X represents the horizontal axis and Y represents the vertical axis (P<sub>xy</sub>).
 
 Paths can be found using either Positions (matrix indexing) or Points (cartesian indexing).
 
-[A Go version is also in to works](https://github.com/valantonini/go-astar)
 ## Example usage
+
 ![PathingExample](Docs/PathingExample.png "Pathing Example")
 
 ```csharp
@@ -48,21 +46,25 @@ Paths can be found using either Positions (matrix indexing) or Points (cartesian
 ```
 
 ## Options
- - Allowing / restricting diagonal movement
- - A choice of heuristic (Manhattan, MaxDxDy, Euclidean, Diagonal shortcut)
- - The option to punish direction changes.
- - A search limit to short circuit the search
+
+- Allowing / restricting diagonal movement
+- A choice of heuristic (Manhattan, MaxDxDy, Euclidean, Diagonal shortcut)
+- The option to punish direction changes.
+- A search limit to short circuit the search
 
 ## FAQ
 
 q. why doesn't this algorithm always find the shortest path?
 
-a. A* optimises speed over accuracy. Because the algorithm relies on a 
+a. A* optimises speed over accuracy. Because the algorithm relies on a
 heuristic to determine the distances from start and finish, it won't necessarily
 produce the shortest path to the target.
+
 ## Changes from 1.1.0 to 1.3.0
+
 - Introduced path weighting to favour or penalize cells. This is off by default and
 can be opted into using the new options. See [this blog post for more info](https://valantonini.com/posts/20210401/)
+
 ```csharp
 var level = @"1111115
               1511151
@@ -72,10 +74,13 @@ var world = Helper.ConvertStringToPathfinderGrid(level);
 var opts = new PathFinderOptions { Weighting = Weighting.Positive };
 var pathfinder = new PathFinder(world, opts);
 ```
+
 ## Changes from 1.0.0 to 1.1.0
+
 - Reimplemented the punish change direction to perform more consistently
 
 ## Changes from 0.1.x to 1.0.0
+
 - The world is now represented by a WorldGrid that uses shorts internally instead of bytes
 - If no path is found, the algorithm now reports an empty array instead of null
 - Moved out of the AStar.Core namespace into simply AStar
