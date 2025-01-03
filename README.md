@@ -1,5 +1,21 @@
 # A 2D A* (A Star) algorithm for Unity C\#
 
+## Install
+
+Open Package Manager window and press Add Package from git URL..., enter following path
+
+```upm
+https://github.com/SAM-tak/CustomUnity.git
+```
+
+or version specifying:
+
+```upm
+https://github.com/SAM-tak/CustomUnity.git#v1.3.0
+```
+
+## About
+
 **This is Unity version.** [Origin](https://github.com/valantonini/AStar)
 
 The world is represented by a WorldGrid that is essentially a matrix of the C# short data type.
