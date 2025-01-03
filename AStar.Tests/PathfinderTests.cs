@@ -1,7 +1,6 @@
 ﻿using System;
 using AStar.Options;
 using NUnit.Framework;
-using Shouldly;
 
 namespace AStar.Tests
 {
@@ -25,14 +24,14 @@ namespace AStar.Tests
             var pathfinder = new PathFinder(grid);
 
             var path = pathfinder.FindPath(new Position(0, 0), new Position(2, 4));
-            
-            path.ShouldBe(new[] {
+
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(0, 0),
                 new Position(1, 1),
                 new Position(2, 2),
                 new Position(2, 3),
                 new Position(2, 4),
-            });
+            }));
         }
 
         [Test]
@@ -40,33 +39,33 @@ namespace AStar.Tests
         {
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(1, 1));
 
-            path.ShouldBe(new[] {
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(1, 1),
-            });
+            }));
         }
 
         [Test]
         public void ShouldPathToAdjacent()
         {
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(2, 1));
-            
-            path.ShouldBe(new[] {
+
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(1, 1),
                 new Position(2, 1),
-            });
+            }));
         }
 
         [Test]
         public void ShouldDoSimplePath()
         {
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
-            
-            path.ShouldBe(new[] {
+
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(1, 1),
                 new Position(2, 2),
                 new Position(3, 2),
                 new Position(4, 2),
-            });
+            }));
         }
 
         [Test]
@@ -76,14 +75,14 @@ namespace AStar.Tests
             _pathFinder = new PathFinder(_world, pathfinderOptions);
 
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
-            
-            path.ShouldBe(new[] {
+
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(1, 1),
                 new Position(2, 1),
                 new Position(3, 1),
                 new Position(4, 1),
                 new Position(4, 2),
-            });
+            }));
         }
 
         [Test]
@@ -97,8 +96,8 @@ namespace AStar.Tests
             _world[2, 2] = 0;
 
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
-            
-            path.ShouldBe(new[] {
+
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(1, 1),
                 new Position(1, 2),
                 new Position(1, 3),
@@ -106,7 +105,7 @@ namespace AStar.Tests
                 new Position(3, 3),
                 new Position(3, 2),
                 new Position(4, 2),
-            });
+            }));
         }
         [Test]
         public void ShouldPathAroundObstacle()
@@ -117,15 +116,15 @@ namespace AStar.Tests
             _world[2, 3] = 0;
             
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
-            
-            path.ShouldBe(new[] {
+
+            Assert.That(path, Is.EquivalentTo(new[] {
                 new Position(1, 1),
                 new Position(1, 2),
                 new Position(1, 3),
                 new Position(2, 4),
                 new Position(3, 3),
                 new Position(4, 2),
-            });
+            }));
         }
 
         [Test]
@@ -140,7 +139,7 @@ namespace AStar.Tests
             _world[2, 6] = 0;
             _world[2, 7] = 0;
             var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
-            path.ShouldBeEmpty();
+            Assert.That(path, Is.Empty);
         }
 
         private static WorldGrid CreateGridInitializedToOpen(int height, int width)

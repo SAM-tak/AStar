@@ -2,7 +2,6 @@ using System;
 using AStar.Heuristics;
 using AStar.Options;
 using NUnit.Framework;
-using Shouldly;
 
 namespace AStar.Tests
 {
@@ -40,7 +39,7 @@ namespace AStar.Tests
 
             var path = pathfinder.FindPath(new Position(2, 9), new Position(15, 3));
 
-            path.ShouldBe(new[]
+            Assert.That(path, Is.EquivalentTo(new[]
             {
                 new Position(2, 9),
                 new Position(3, 8),
@@ -57,7 +56,7 @@ namespace AStar.Tests
                 new Position(14, 1),
                 new Position(15, 2),
                 new Position(15, 3),
-            });
+            }));
         }
 
         [Test]
@@ -91,7 +90,7 @@ namespace AStar.Tests
             Console.WriteLine("actual");
             Console.WriteLine("expected");
 
-            path.ShouldBe(expected);
+            Assert.That(path, Is.EqualTo(expected));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AStar.Options;
 using NUnit.Framework;
-using Shouldly;
 
 namespace AStar.Tests
 {
@@ -27,7 +26,7 @@ namespace AStar.Tests
 
             var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
 
-            path.ShouldBeEmpty();
+            Assert.That(path, Is.Empty);
         }
     }
 }

@@ -1,6 +1,5 @@
 using AStar.Options;
 using NUnit.Framework;
-using Shouldly;
 
 namespace AStar.Tests
 {
@@ -20,13 +19,13 @@ namespace AStar.Tests
 
         var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
 
-        path.ShouldBe(new[] {
-              new Position(1, 1),
-              new Position(2, 2),
-              new Position(2, 3),
-              new Position(2, 4),
-              new Position(1, 5),
-            });
+        Assert.That(path, Is.EquivalentTo(new[] {
+            new Position(1, 1),
+            new Position(2, 2),
+            new Position(2, 3),
+            new Position(2, 4),
+            new Position(1, 5),
+        }));
     }
 
     [Test]
@@ -43,13 +42,13 @@ namespace AStar.Tests
 
         var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
 
-        path.ShouldBe(new[] {
-              new Position(1, 1),
-              new Position(2, 2),
-              new Position(2, 3),
-              new Position(2, 4),
-              new Position(1, 5),
-            });
+        Assert.That(path, Is.EquivalentTo(new[] {
+            new Position(1, 1),
+            new Position(2, 2),
+            new Position(2, 3),
+            new Position(2, 4),
+            new Position(1, 5),
+        }));
     }
   }
 }
