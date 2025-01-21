@@ -1,4 +1,4 @@
-using AStar.Collections.MultiDimensional;
+using AStar.Collections.BiDimensional;
 
 namespace AStar
 {

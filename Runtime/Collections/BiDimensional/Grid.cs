@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AStar.Collections.MultiDimensional
+namespace AStar.Collections.BiDimensional
 {
-    public class Grid<T> : IModelAGrid<T>
+    public class Grid<T>
     {
         private readonly T[] _grid;
 
@@ -59,7 +59,12 @@ namespace AStar.Collections.MultiDimensional
             set => _grid[position.x + Width * position.y] = value;
         }
 
-        ///<inheritdoc/>
+        /// <summary>
+        /// Unlike standard C# arrays, note that the order is columns and rows.
+        /// </summary>
+        /// <param name="x">x index</param>
+        /// <param name="y">y index</param>
+        /// <returns></returns>
         public T this[int x, int y]
         {
             get => _grid[x + Width * y];

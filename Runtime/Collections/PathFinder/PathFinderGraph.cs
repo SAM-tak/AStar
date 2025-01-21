@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using AStar.Collections.MultiDimensional;
+using AStar.Collections.BiDimensional;
 using AStar.Collections.PriorityQueue;
 
 namespace AStar.Collections.PathFinder

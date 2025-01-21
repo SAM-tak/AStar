@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AStar.Collections.MultiDimensional
+namespace AStar.Collections.BiDimensional
 {
     public static class GridOffsets
     {
