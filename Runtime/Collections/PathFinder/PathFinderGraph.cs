@@ -9,7 +9,7 @@ namespace AStar.Collections.PathFinder
     {
         private readonly bool _allowDiagonalTraversal;
         private readonly Grid<PathFinderNode> _internalGrid;
-        private readonly SimplePriorityQueue<PathFinderNode> _open = new SimplePriorityQueue<PathFinderNode>(new ComparePathFinderNodeByFValue());
+        private readonly SimplePriorityQueue<PathFinderNode> _open = new(new ComparePathFinderNodeByFValue());
 
         public bool HasOpenNodes
         {
@@ -18,6 +18,7 @@ namespace AStar.Collections.PathFinder
                 return _open.Count > 0;
             }
         }
+
         public PathFinderGraph(int height, int width, bool allowDiagonalTraversal)
         {
             _allowDiagonalTraversal = allowDiagonalTraversal;

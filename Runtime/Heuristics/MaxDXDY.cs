@@ -7,7 +7,7 @@ namespace AStar.Heuristics
         public int Calculate(Position source, Position destination)
         {
             var heuristicEstimate = 2;
-            var h = heuristicEstimate * (Math.Max(Math.Abs(source.Row - destination.Row), Math.Abs(source.Column - destination.Column)));
+            var h = heuristicEstimate * Math.Max(Math.Abs(source.Row - destination.Row), Math.Abs(source.Column - destination.Column));
             return h;
         }
     }

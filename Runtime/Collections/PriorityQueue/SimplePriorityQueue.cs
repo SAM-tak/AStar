@@ -4,7 +4,7 @@ namespace AStar.Collections.PriorityQueue
 {
     internal class SimplePriorityQueue<T> : IModelAPriorityQueue<T>
     {
-        private readonly List<T> _innerList = new List<T>();
+        private readonly List<T> _innerList = new();
         private readonly IComparer<T> _comparer;
 
         public SimplePriorityQueue(IComparer<T> comparer = null)
@@ -14,7 +14,7 @@ namespace AStar.Collections.PriorityQueue
 
         public T Peek()
         {
-            return _innerList.Count > 0 ? _innerList[0] : default(T);
+            return _innerList.Count > 0 ? _innerList[0] : default;
         }
 
         public void Clear()
@@ -61,7 +61,7 @@ namespace AStar.Collections.PriorityQueue
             var result = _innerList[0];
             var p = 0;
 
-            _innerList[0] = _innerList[_innerList.Count - 1];
+            _innerList[0] = _innerList[^1];
             _innerList.RemoveAt(_innerList.Count - 1);
 
             do
@@ -163,9 +163,7 @@ namespace AStar.Collections.PriorityQueue
 
         private void SwitchElements(int i, int j)
         {
-            var h = _innerList[i];
-            _innerList[i] = _innerList[j];
-            _innerList[j] = h;
+            (_innerList[j], _innerList[i]) = (_innerList[i], _innerList[j]);
         }
 
         private int OnCompare(int i, int j)

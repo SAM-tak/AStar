@@ -7,6 +7,7 @@ namespace AStar.Collections.MultiDimensional
     public class Grid<T> : IModelAGrid<T>
     {
         private readonly T[] _grid;
+
         public Grid(int height, int width)
         {
             if (height <= 0)
@@ -32,9 +33,9 @@ namespace AStar.Collections.MultiDimensional
         public IEnumerable<Position> GetSuccessorPositions(Position node, bool optionsUseDiagonals = false)
         {
             var offsets = GridOffsets.GetOffsets(optionsUseDiagonals);
-            foreach (var neighbourOffset in offsets)
+            foreach (var (row, column) in offsets)
             {
-                var successorRow = node.Row + neighbourOffset.row;
+                var successorRow = node.Row + row;
                 
                 if (successorRow < 0 || successorRow >= Height)
                 {
@@ -42,7 +43,7 @@ namespace AStar.Collections.MultiDimensional
                     
                 }
                 
-                var successorColumn = node.Column + neighbourOffset.column;
+                var successorColumn = node.Column + column;
 
                 if (successorColumn < 0 || successorColumn >= Width)
                 {
