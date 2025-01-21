@@ -14,20 +14,20 @@ namespace AStar.Collections.PathFinder
 
         public bool HasOpenNodes => _open.Count > 0;
 
-        public PathFinderGraph(int height, int width, bool allowDiagonalTraversal)
+        public PathFinderGraph(int width, int height, bool allowDiagonalTraversal)
         {
             _allowDiagonalTraversal = allowDiagonalTraversal;
-            _internalGrid = new Grid<PathFinderNode>(height, width);
+            _internalGrid = new Grid<PathFinderNode>(width, height);
             Initialise();
         }
 
         private void Initialise()
         {
-            for (var row = 0; row < _internalGrid.Height; row++)
+            for (var y = 0; y < _internalGrid.Height; y++)
             {
-                for (var column = 0; column < _internalGrid.Width; column++)
+                for (var x = 0; x < _internalGrid.Width; x++)
                 {
-                    _internalGrid[row, column] = new PathFinderNode(position: new Vector2Int(column, row),
+                    _internalGrid[x, y] = new PathFinderNode(position: new Vector2Int(x, y),
                         g: 0,
                         h: 0,
                         parentNodePosition: default);

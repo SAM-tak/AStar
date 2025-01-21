@@ -10,9 +10,9 @@ namespace AStar
         /// <summary>
         /// Creates a new world with the given dimensions initialised to closed
         /// </summary>
-        /// <param name="height">height of the world (Position.Row / Point.Y)</param>
         /// <param name="width">width of the world (Position.Column / Point.X)</param>
-        public WorldGrid(int height, int width) : base(height, width)
+        /// <param name="height">height of the world (Position.Row / Point.Y)</param>
+        public WorldGrid(int width, int height) : base(width, height)
         {
         }
 
@@ -28,7 +28,7 @@ namespace AStar
             {
                 for (var column = 0; column < worldArray.GetLength(1); column++)
                 {
-                    this[row, column] = worldArray[row, column];
+                    this[column, row] = worldArray[row, column];
                 }
             }
         }

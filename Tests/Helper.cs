@@ -15,7 +15,7 @@ namespace AStar.Tests
             {
                 for (var column = 0; column < worldGrid.Width; column++)
                 {
-                    s.Append(worldGrid[row, column]);
+                    s.Append(worldGrid[column, row]);
                     if (appendSpace)
                     {
                         s.Append(' ');
@@ -41,7 +41,7 @@ namespace AStar.Tests
                     }
                     else
                     {
-                        s.Append(world[row, column]);
+                        s.Append(world[column, row]);
                     }
                     s.Append(' ');
                 }
@@ -80,7 +80,7 @@ namespace AStar.Tests
                 .Select(row => row.Trim())
                 .ToList();
             
-            var world = new WorldGrid(splitLevel.Count, splitLevel[0].Length);
+            var world = new WorldGrid(splitLevel[0].Length, splitLevel.Count);
 
             for (var row = 0; row < splitLevel.Count; row++)
             {
@@ -88,7 +88,7 @@ namespace AStar.Tests
                 {
                     if (splitLevel[row][column] != closedCharacter)
                     {
-                        world[row, column] = short.Parse(splitLevel[row][column].ToString());
+                        world[column, row] = short.Parse(splitLevel[row][column].ToString());
                     }
                 }
             }

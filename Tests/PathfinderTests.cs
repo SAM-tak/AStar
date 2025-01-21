@@ -20,7 +20,7 @@ namespace AStar.Tests
         [Test]
         public void ShouldPathRectangleGrid()
         {
-            var grid = CreateGridInitializedToOpen(3, 5);
+            var grid = CreateGridInitializedToOpen(5, 3);
             var pathfinder = new PathFinder(grid);
 
             var path = pathfinder.FindPath(new Vector2Int(0, 0), new Vector2Int(4, 2));
@@ -91,8 +91,8 @@ namespace AStar.Tests
             var pathfinderOptions = new PathFinderOptions { UseDiagonals = false };
             _pathFinder = new PathFinder(_world, pathfinderOptions);
 
-            _world[2, 0] = 0;
-            _world[2, 1] = 0;
+            _world[0, 2] = 0;
+            _world[1, 2] = 0;
             _world[2, 2] = 0;
 
             var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
@@ -110,11 +110,11 @@ namespace AStar.Tests
         [Test]
         public void ShouldPathAroundObstacle()
         {
-            _world[2, 0] = 0;
-            _world[2, 1] = 0;
+            _world[0, 2] = 0;
+            _world[1, 2] = 0;
             _world[2, 2] = 0;
-            _world[2, 3] = 0;
-            
+            _world[3, 2] = 0;
+
             var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
 
             Assert.That(path, Is.EquivalentTo(new[] {
@@ -130,27 +130,27 @@ namespace AStar.Tests
         [Test]
         public void ShouldReturnEmptyPathIfUnreachable()
         {
-            _world[2, 0] = 0;
-            _world[2, 1] = 0;
+            _world[0, 2] = 0;
+            _world[1, 2] = 0;
             _world[2, 2] = 0;
-            _world[2, 3] = 0;
-            _world[2, 4] = 0;
-            _world[2, 5] = 0;
-            _world[2, 6] = 0;
-            _world[2, 7] = 0;
+            _world[3, 2] = 0;
+            _world[4, 2] = 0;
+            _world[5, 2] = 0;
+            _world[6, 2] = 0;
+            _world[7, 2] = 0;
             var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
             Assert.That(path, Is.Empty);
         }
 
-        private static WorldGrid CreateGridInitializedToOpen(int height, int width)
+        private static WorldGrid CreateGridInitializedToOpen(int width, int height)
         {
-            var grid = new WorldGrid(height, width);
+            var grid = new WorldGrid(width, height);
 
             for (var row = 0; row < grid.Height; row++)
             {
                 for (var column = 0; column < grid.Width; column++)
                 {
-                    grid[row, column] = 1;
+                    grid[column, row] = 1;
                 }
             }
 

@@ -42,7 +42,7 @@ namespace AStar
         public IEnumerable<Vector2Int> FindPathAsEnumerable(Vector2Int start, Vector2Int end)
         {
             var nodesVisited = 0;
-            var graph = new PathFinderGraph(_world.Height, _world.Width, _options.UseDiagonals);
+            var graph = new PathFinderGraph(_world.Width, _world.Height, _options.UseDiagonals);
             var startNode = new PathFinderNode(position: start, g: 0, h: 2, parentNodePosition: start);
             graph.OpenNode(startNode);
 
