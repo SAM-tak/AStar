@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
 namespace AStar.Collections.MultiDimensional
@@ -11,32 +10,32 @@ namespace AStar.Collections.MultiDimensional
 
         public Grid(int height, int width)
         {
+            if (width <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(width));
+            }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(height));
             }
             
-            if (width <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(width));
-            }
-            
-            Height = height;
             Width = width;
+            Height = height;
 
-            _grid = new T[height * width];
+            _grid = new T[width * height];
         }
+
+        public int Width { get; }
 
         public int Height { get; }
 
-        public int Width { get; }
-        
-        public IEnumerable<Position> GetSuccessorPositions(Position node, bool optionsUseDiagonals = false)
+        public IEnumerable<Vector2Int> GetSuccessorPositions(Vector2Int node, bool optionsUseDiagonals = false)
         {
             var offsets = GridOffsets.GetOffsets(optionsUseDiagonals);
             foreach (var (row, column) in offsets)
             {
-                var successorRow = node.Row + row;
+                var successorRow = node.y + row;
                 
                 if (successorRow < 0 || successorRow >= Height)
                 {
@@ -44,50 +43,29 @@ namespace AStar.Collections.MultiDimensional
                     
                 }
                 
-                var successorColumn = node.Column + column;
+                var successorColumn = node.x + column;
 
                 if (successorColumn < 0 || successorColumn >= Width)
                 {
                     continue;
                 }
                 
-                yield return new Position(successorRow, successorColumn);
+                yield return new Vector2Int(successorColumn, successorRow);
             }
         }
 
-        public T this[Vector2Int point]
+        public T this[Vector2Int position]
         {
             get
             {
-                return this[point.ToPosition()];
+                return _grid[ConvertRowColumnToIndex(position.y, position.x)];
             }
             set
             {
-                this[point.ToPosition()] = value;
+                _grid[ConvertRowColumnToIndex(position.y, position.x)] = value;
             }
         }
-        public T this[Point point]
-        {
-            get
-            {
-                return this[point.ToPosition()];
-            }
-            set
-            {
-                this[point.ToPosition()] = value;
-            }
-        }
-        public T this[Position position]
-        {
-            get
-            {
-                return _grid[ConvertRowColumnToIndex(position.Row, position.Column)];
-            }
-            set
-            {
-                _grid[ConvertRowColumnToIndex(position.Row, position.Column)] = value;
-            }
-        }
+
         public T this[int row, int column]
         {
             get

@@ -6,23 +6,15 @@ namespace AStar.Heuristics
     {
         public static ICalculateHeuristic Create(HeuristicFormula heuristicFormula)
         {
-            switch (heuristicFormula)
-            {
-                case HeuristicFormula.Manhattan:
-                    return new Manhattan();
-                case HeuristicFormula.MaxDXDY:
-                    return new MaxDXDY();
-                case HeuristicFormula.DiagonalShortCut:
-                    return new DiagonalShortcut();
-                case HeuristicFormula.Euclidean:
-                    return new Euclidean();
-                case HeuristicFormula.EuclideanNoSQR:
-                    return new EuclideanNoSQR();
-                case HeuristicFormula.Custom1:
-                    return new Custom1();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(heuristicFormula), heuristicFormula, null);
-            }
+            return heuristicFormula switch {
+                HeuristicFormula.Manhattan => new Manhattan(),
+                HeuristicFormula.MaxDXDY => new MaxDXDY(),
+                HeuristicFormula.DiagonalShortCut => new DiagonalShortcut(),
+                HeuristicFormula.Euclidean => new Euclidean(),
+                HeuristicFormula.EuclideanNoSQR => new EuclideanNoSQR(),
+                HeuristicFormula.Custom1 => new Custom1(),
+                _ => throw new ArgumentOutOfRangeException(nameof(heuristicFormula), heuristicFormula, null),
+            };
         }
     }
 }

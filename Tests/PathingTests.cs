@@ -1,4 +1,5 @@
-﻿using AStar.Options;
+﻿using UnityEngine;
+using AStar.Options;
 using NUnit.Framework;
 
 namespace AStar.Tests
@@ -24,12 +25,12 @@ namespace AStar.Tests
         {
             var pathfinder = new PathFinder(_world);
 
-            var path = pathfinder.FindPath(new Position(1, 1), new Position(2, 3));
+            var path = pathfinder.FindPath(new Vector2Int(1, 1), new Vector2Int(3, 2));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(2, 2),
-                new Position(2, 3),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 2),
+                new Vector2Int(3, 2),
             }));
         }
 
@@ -38,14 +39,14 @@ namespace AStar.Tests
         {
             var pathfinder = new PathFinder(_world);
 
-            var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
+            var path = pathfinder.FindPath(new Vector2Int(1, 1), new Vector2Int(5, 1));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(1, 2),
-                new Position(2, 3),
-                new Position(1, 4),
-                new Position(1, 5),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 1),
+                new Vector2Int(3, 2),
+                new Vector2Int(4, 1),
+                new Vector2Int(5, 1),
             }));
 
         }
@@ -55,16 +56,16 @@ namespace AStar.Tests
         {
             var pathfinder = new PathFinder(_world, new PathFinderOptions { UseDiagonals = false });
 
-            var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
+            var path = pathfinder.FindPath(new Vector2Int(1, 1), new Vector2Int(5, 1));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(1, 2),
-                new Position(2, 2),
-                new Position(2, 3),
-                new Position(2, 4),
-                new Position(2, 5),
-                new Position(1, 5),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 1),
+                new Vector2Int(2, 2),
+                new Vector2Int(3, 2),
+                new Vector2Int(4, 2),
+                new Vector2Int(5, 2),
+                new Vector2Int(5, 1),
             }));
         }
     }

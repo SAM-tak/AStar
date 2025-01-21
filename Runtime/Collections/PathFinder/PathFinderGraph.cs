@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using AStar.Collections.MultiDimensional;
 using AStar.Collections.PriorityQueue;
 
@@ -11,13 +12,7 @@ namespace AStar.Collections.PathFinder
         private readonly Grid<PathFinderNode> _internalGrid;
         private readonly SimplePriorityQueue<PathFinderNode> _open = new(new ComparePathFinderNodeByFValue());
 
-        public bool HasOpenNodes
-        {
-            get
-            {
-                return _open.Count > 0;
-            }
-        }
+        public bool HasOpenNodes => _open.Count > 0;
 
         public PathFinderGraph(int height, int width, bool allowDiagonalTraversal)
         {
@@ -32,7 +27,7 @@ namespace AStar.Collections.PathFinder
             {
                 for (var column = 0; column < _internalGrid.Width; column++)
                 {
-                    _internalGrid[row, column] = new PathFinderNode(position: new Position(row, column),
+                    _internalGrid[row, column] = new PathFinderNode(position: new Vector2Int(column, row),
                         g: 0,
                         h: 0,
                         parentNodePosition: default);

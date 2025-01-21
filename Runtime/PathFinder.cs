@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using AStar.Collections.PathFinder;
@@ -16,38 +15,15 @@ namespace AStar
         private readonly PathFinderOptions _options;
         private readonly WorldGrid _world;
         private readonly ICalculateHeuristic _heuristic;
-        private readonly Stack<Position> _path = new(256);
+        private readonly Stack<Vector2Int> _path;
 
-        public PathFinder(WorldGrid worldGrid, PathFinderOptions pathFinderOptions = null)
+        public PathFinder(WorldGrid worldGrid, PathFinderOptions pathFinderOptions = null, int bufferReseveSize = 256)
         {
             _world = worldGrid ?? throw new ArgumentNullException(nameof(worldGrid));
-            _options = pathFinderOptions ?? new PathFinderOptions();
+            _options = pathFinderOptions ?? new();
             _heuristic = HeuristicFactory.Create(_options.HeuristicFormula);
+            _path = new(bufferReseveSize);
         }
-
-        /// <summary>
-        /// Determines a path between 2 positions where the point's X
-        /// represents the column and the point's Y represents the row
-        /// </summary>
-        /// <param name="start">start position</param>
-        /// <param name="end">target position</param>
-        /// <returns>An array of points from the start to end points or empty[] if unreachable</returns>
-        public Vector2Int[] FindPath(Vector2Int start, Vector2Int end)
-            => FindPathAsEnumerable(start.ToPosition(), end.ToPosition())
-                .Select(position => position.ToVector2Int())
-                .ToArray();
-
-        /// <summary>
-        /// Determines a path between 2 positions where the point's X
-        /// represents the column and the point's Y represents the row
-        /// </summary>
-        /// <param name="start">start position</param>
-        /// <param name="end">target position</param>
-        /// <returns>An array of points from the start to end points or empty[] if unreachable</returns>
-        public Point[] FindPath(Point start, Point end)
-            => FindPathAsEnumerable(start.ToPosition(), end.ToPosition())
-                .Select(position => position.ToPoint())
-                .ToArray();
 
         /// <summary>
         /// Determines a path between 2 positions
@@ -55,7 +31,7 @@ namespace AStar
         /// <param name="start">start/current position</param>
         /// <param name="end">target position</param>
         /// <returns>An array of positions from the start to end position or empty[] if unreachable</returns>
-        public Position[] FindPath(Position start, Position end) => FindPathAsEnumerable(start, end).ToArray();
+        public Vector2Int[] FindPath(Vector2Int start, Vector2Int end) => FindPathAsEnumerable(start, end).ToArray();
 
         /// <summary>
         /// Determines a path between 2 positions
@@ -63,11 +39,10 @@ namespace AStar
         /// <param name="start">start/current position</param>
         /// <param name="end">target position</param>
         /// <returns>Enumerable object of positions from the start to end position</returns>
-        public IEnumerable<Position> FindPathAsEnumerable(Position start, Position end)
+        public IEnumerable<Vector2Int> FindPathAsEnumerable(Vector2Int start, Vector2Int end)
         {
             var nodesVisited = 0;
-            IModelAGraph<PathFinderNode> graph = new PathFinderGraph(_world.Height, _world.Width, _options.UseDiagonals);
-
+            var graph = new PathFinderGraph(_world.Height, _world.Width, _options.UseDiagonals);
             var startNode = new PathFinderNode(position: start, g: 0, h: 2, parentNodePosition: start);
             graph.OpenNode(startNode);
 
@@ -134,31 +109,31 @@ namespace AStar
             }
         }
 
-        private int CalculateModifierToG(PathFinderNode q, PathFinderNode successor, Position end)
+        private int CalculateModifierToG(PathFinderNode q, PathFinderNode successor, Vector2Int end)
         {
             if (q.Position == q.ParentNodePosition)
             {
                 return 0;
             }
             
-            var gPunishment = Math.Abs(successor.Position.Row - end.Row) + Math.Abs(successor.Position.Column - end.Column);
+            var gPunishment = Math.Abs(successor.Position.y - end.y) + Math.Abs(successor.Position.x - end.x);
             
-            var successorIsVerticallyAdjacentToQ = successor.Position.Row - q.Position.Row != 0;
+            var successorIsVerticallyAdjacentToQ = successor.Position.y - q.Position.y != 0;
 
             if (successorIsVerticallyAdjacentToQ)
             {
-                var qIsVerticallyAdjacentToParent = q.Position.Row - q.ParentNodePosition.Row == 0;
+                var qIsVerticallyAdjacentToParent = q.Position.y - q.ParentNodePosition.y == 0;
                 if (qIsVerticallyAdjacentToParent)
                 {
                     return gPunishment;
                 }
             }
 
-            var successorIsHorizontallyAdjacentToQ = successor.Position.Row - q.Position.Row != 0;
+            var successorIsHorizontallyAdjacentToQ = successor.Position.y - q.Position.y != 0;
 
             if (successorIsHorizontallyAdjacentToQ)
             {
-                var qIsHorizontallyAdjacentToParent = q.Position.Row - q.ParentNodePosition.Row == 0;
+                var qIsHorizontallyAdjacentToParent = q.Position.y - q.ParentNodePosition.y == 0;
                 if (qIsHorizontallyAdjacentToParent)
                 {
                     return gPunishment;
@@ -167,10 +142,10 @@ namespace AStar
 
             if (_options.UseDiagonals)
             {
-                var successorIsDiagonallyAdjacentToQ = (successor.Position.Column - successor.Position.Row) == (q.Position.Column - q.Position.Row);
+                var successorIsDiagonallyAdjacentToQ = (successor.Position.x - successor.Position.y) == (q.Position.x - q.Position.y);
                 if (successorIsDiagonallyAdjacentToQ)
                 {
-                    var qIsDiagonallyAdjacentToParent = (q.Position.Column - q.Position.Row) == (q.ParentNodePosition.Column - q.ParentNodePosition.Row)
+                    var qIsDiagonallyAdjacentToParent = (q.Position.x - q.Position.y) == (q.ParentNodePosition.x - q.ParentNodePosition.y)
                                                         && IsStraightLine(q.ParentNodePosition, q.Position, successor.Position);
                     if (qIsDiagonallyAdjacentToParent)
                     {
@@ -182,29 +157,21 @@ namespace AStar
             return 0;
         }
 
-        private bool IsStraightLine(Position a, Position b, Position c)
-        {
-            // area of triangle == 0
-            return (a.Column * (b.Row - c.Row) + b.Column * (c.Row - a.Row) + c.Column * (a.Row - b.Row)) / 2 == 0;
-        }
+        private bool IsStraightLine(Vector2Int a, Vector2Int b, Vector2Int c)
+            => (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2 == 0; // area of triangle == 0
 
         private bool BetterPathToSuccessorFound(PathFinderNode updateSuccessor, PathFinderNode currentSuccessor)
-        {
-            return !currentSuccessor.HasBeenVisited ||
-                (currentSuccessor.HasBeenVisited && updateSuccessor.F < currentSuccessor.F);
-        }
+            => !currentSuccessor.HasBeenVisited || (currentSuccessor.HasBeenVisited && updateSuccessor.F < currentSuccessor.F);
 
         private void OrderClosedNodes(IModelAGraph<PathFinderNode> graph, PathFinderNode endNode)
         {
             _path.Clear();
             var currentNode = endNode;
-
-            while (currentNode.Position != currentNode.ParentNodePosition)
+            while(currentNode.Position != currentNode.ParentNodePosition)
             {
                 _path.Push(currentNode.Position);
                 currentNode = graph.GetParent(currentNode);
             }
-
             _path.Push(currentNode.Position);
         }
     }

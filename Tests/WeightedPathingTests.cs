@@ -1,3 +1,4 @@
+using UnityEngine;
 using AStar.Options;
 using NUnit.Framework;
 
@@ -17,14 +18,14 @@ namespace AStar.Tests
             var opts = new PathFinderOptions { Weighting = Weighting.Positive };
             var pathfinder = new PathFinder(world, opts);
 
-            var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
+            var path = pathfinder.FindPath(new Vector2Int(1, 1), new Vector2Int(5, 1));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(2, 2),
-                new Position(2, 3),
-                new Position(2, 4),
-                new Position(1, 5),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 2),
+                new Vector2Int(3, 2),
+                new Vector2Int(4, 2),
+                new Vector2Int(5, 1),
             }));
         }
 
@@ -40,14 +41,14 @@ namespace AStar.Tests
             var opts = new PathFinderOptions { Weighting = Weighting.Negative };
             var pathfinder = new PathFinder(world, opts);
 
-            var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
+            var path = pathfinder.FindPath(new Vector2Int(1, 1), new Vector2Int(5, 1));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(2, 2),
-                new Position(2, 3),
-                new Position(2, 4),
-                new Position(1, 5),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 2),
+                new Vector2Int(3, 2),
+                new Vector2Int(4, 2),
+                new Vector2Int(5, 1),
             }));
         }
     }

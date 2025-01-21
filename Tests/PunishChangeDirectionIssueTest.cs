@@ -1,3 +1,4 @@
+using UnityEngine;
 using AStar.Heuristics;
 using AStar.Options;
 using NUnit.Framework;
@@ -31,56 +32,56 @@ namespace AStar.Tests
             var pathFinderOptions = new PathFinderOptions { UseDiagonals = false, PunishChangeDirection = false, HeuristicFormula = HeuristicFormula.Euclidean};
             var pathfinder = new PathFinder(_world, pathFinderOptions);
 
-            var path = pathfinder.FindPath(new Position(7, 2), new Position(1, 17));
+            var path = pathfinder.FindPath(new Vector2Int(2, 7), new Vector2Int(17, 1));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(7, 2),
-                new Position(7, 3),
-                new Position(7, 4),
-                new Position(7, 5),
-                new Position(7, 6),
-                new Position(7, 7),
-                new Position(7, 8),
-                new Position(7, 9),
-                new Position(7, 10),
-                new Position(7, 11),
-                new Position(7, 12),
-                new Position(6, 12),
-                new Position(5, 12),
-                new Position(4, 12),
-                new Position(3, 12),
-                new Position(3, 13),
-                new Position(2, 13),
-                new Position(1, 13),
-                new Position(1, 14),
-                new Position(1, 15),
-                new Position(1, 16),
-                new Position(1, 17),
+                new Vector2Int(2, 7),
+                new Vector2Int(3, 7),
+                new Vector2Int(4, 7),
+                new Vector2Int(5, 7),
+                new Vector2Int(6, 7),
+                new Vector2Int(7, 7),
+                new Vector2Int(8, 7),
+                new Vector2Int(9, 7),
+                new Vector2Int(10, 7),
+                new Vector2Int(11, 7),
+                new Vector2Int(12, 7),
+                new Vector2Int(12, 6),
+                new Vector2Int(12, 5),
+                new Vector2Int(12, 4),
+                new Vector2Int(12, 3),
+                new Vector2Int(13, 3),
+                new Vector2Int(13, 2),
+                new Vector2Int(13, 1),
+                new Vector2Int(14, 1),
+                new Vector2Int(15, 1),
+                new Vector2Int(16, 1),
+                new Vector2Int(17, 1),
             }));
         }
-        
+
         [Test]
         public void ShouldCorrectIssue()
         {
             var pathFinderOptions = new PathFinderOptions { UseDiagonals = true, PunishChangeDirection = false};
             var pathfinder = new PathFinder(_world, pathFinderOptions);
 
-            var path = pathfinder.FindPath(new Position(1, 2), new Position(8, 14));
+            var path = pathfinder.FindPath(new Vector2Int(2, 1), new Vector2Int(14, 8));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 2),
-                new Position(2, 3),
-                new Position(3, 4),
-                new Position(4, 5),
-                new Position(5, 6),
-                new Position(6, 7),
-                new Position(7, 8),
-                new Position(8, 9),
-                new Position(8, 10),
-                new Position(8, 11),
-                new Position(8, 12),
-                new Position(8, 13),
-                new Position(8, 14),
+                new Vector2Int(2, 1),
+                new Vector2Int(3, 2),
+                new Vector2Int(4, 3),
+                new Vector2Int(5, 4),
+                new Vector2Int(6, 5),
+                new Vector2Int(7, 6),
+                new Vector2Int(8, 7),
+                new Vector2Int(9, 8),
+                new Vector2Int(10, 8),
+                new Vector2Int(11, 8),
+                new Vector2Int(12, 8),
+                new Vector2Int(13, 8),
+                new Vector2Int(14, 8),
             }));
         }
     }

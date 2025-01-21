@@ -1,4 +1,5 @@
-﻿using AStar.Options;
+﻿using UnityEngine;
+using AStar.Options;
 using NUnit.Framework;
 
 namespace AStar.Tests
@@ -24,7 +25,7 @@ namespace AStar.Tests
         {
             var pathfinder = new PathFinder(_world, new PathFinderOptions { SearchLimit = 2 });
 
-            var path = pathfinder.FindPath(new Position(1, 1), new Position(1, 5));
+            var path = pathfinder.FindPath(new Vector2Int(1, 1), new Vector2Int(5, 1));
 
             Assert.That(path, Is.Empty);
         }

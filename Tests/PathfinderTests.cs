@@ -1,4 +1,4 @@
-﻿using System;
+﻿using UnityEngine;
 using AStar.Options;
 using NUnit.Framework;
 
@@ -23,48 +23,48 @@ namespace AStar.Tests
             var grid = CreateGridInitializedToOpen(3, 5);
             var pathfinder = new PathFinder(grid);
 
-            var path = pathfinder.FindPath(new Position(0, 0), new Position(2, 4));
+            var path = pathfinder.FindPath(new Vector2Int(0, 0), new Vector2Int(4, 2));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(0, 0),
-                new Position(1, 1),
-                new Position(2, 2),
-                new Position(2, 3),
-                new Position(2, 4),
+                new Vector2Int(0, 0),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 2),
+                new Vector2Int(3, 2),
+                new Vector2Int(4, 2),
             }));
         }
 
         [Test]
         public void ShouldPathToSelf()
         {
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(1, 1));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(1, 1));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
+                new Vector2Int(1, 1),
             }));
         }
 
         [Test]
         public void ShouldPathToAdjacent()
         {
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(2, 1));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(1, 2));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(2, 1),
+                new Vector2Int(1, 1),
+                new Vector2Int(1, 2),
             }));
         }
 
         [Test]
         public void ShouldDoSimplePath()
         {
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(2, 2),
-                new Position(3, 2),
-                new Position(4, 2),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 2),
+                new Vector2Int(2, 3),
+                new Vector2Int(2, 4),
             }));
         }
 
@@ -74,14 +74,14 @@ namespace AStar.Tests
             var pathfinderOptions = new PathFinderOptions { UseDiagonals = false };
             _pathFinder = new PathFinder(_world, pathfinderOptions);
 
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(2, 1),
-                new Position(3, 1),
-                new Position(4, 1),
-                new Position(4, 2),
+                new Vector2Int(1, 1),
+                new Vector2Int(1, 2),
+                new Vector2Int(1, 3),
+                new Vector2Int(1, 4),
+                new Vector2Int(2, 4),
             }));
         }
 
@@ -95,16 +95,16 @@ namespace AStar.Tests
             _world[2, 1] = 0;
             _world[2, 2] = 0;
 
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(1, 2),
-                new Position(1, 3),
-                new Position(2, 3),
-                new Position(3, 3),
-                new Position(3, 2),
-                new Position(4, 2),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 1),
+                new Vector2Int(3, 1),
+                new Vector2Int(3, 2),
+                new Vector2Int(3, 3),
+                new Vector2Int(2, 3),
+                new Vector2Int(2, 4),
             }));
         }
         [Test]
@@ -115,15 +115,15 @@ namespace AStar.Tests
             _world[2, 2] = 0;
             _world[2, 3] = 0;
             
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
 
             Assert.That(path, Is.EquivalentTo(new[] {
-                new Position(1, 1),
-                new Position(1, 2),
-                new Position(1, 3),
-                new Position(2, 4),
-                new Position(3, 3),
-                new Position(4, 2),
+                new Vector2Int(1, 1),
+                new Vector2Int(2, 1),
+                new Vector2Int(3, 1),
+                new Vector2Int(4, 2),
+                new Vector2Int(3, 3),
+                new Vector2Int(2, 4),
             }));
         }
 
@@ -138,7 +138,7 @@ namespace AStar.Tests
             _world[2, 5] = 0;
             _world[2, 6] = 0;
             _world[2, 7] = 0;
-            var path = _pathFinder.FindPath(new Position(1, 1), new Position(4, 2));
+            var path = _pathFinder.FindPath(new Vector2Int(1, 1), new Vector2Int(2, 4));
             Assert.That(path, Is.Empty);
         }
 
@@ -155,16 +155,6 @@ namespace AStar.Tests
             }
 
             return grid;
-        }
-
-        private static void PrintCoordinates(Position[] path)
-        {
-            foreach (var node in path)
-            {
-                Console.WriteLine(node.Row);
-                Console.WriteLine(node.Column);
-                Console.WriteLine(Environment.NewLine);
-            }
         }
     }
 }

@@ -1,7 +1,9 @@
+using UnityEngine;
+
 namespace AStar.Heuristics
 {
     public interface ICalculateHeuristic
     {
-        int Calculate(Position source, Position destination);
+        int Calculate(Vector2Int source, Vector2Int destination);
     }
 }

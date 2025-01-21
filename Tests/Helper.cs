@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -28,7 +27,7 @@ namespace AStar.Tests
             return s.ToString();
         }
 
-        public static string PrintPath(WorldGrid world, Position[] path, bool appendSpace = true)
+        public static string PrintPath(WorldGrid world, Vector2Int[] path, bool appendSpace = true)
         {
             var s = new StringBuilder();
             
@@ -36,7 +35,7 @@ namespace AStar.Tests
             {
                 for (var column = 0; column < world.Width; column++)
                 {
-                    if (path.Any(n => n.Row == row && n.Column == column))
+                    if (path.Any(n => n.y == row && n.x == column))
                     {
                         s.Append("*");
                     }
@@ -51,49 +50,7 @@ namespace AStar.Tests
             return s.ToString();
         }
         
-        public static string PrintPath(WorldGrid world, Point[] path, bool appendSpace = true)
-        {
-            var s = new StringBuilder();
-            
-            for (var y = 0; y < world.Height; y++)
-            {
-                for (var x = 0; x < world.Width; x++)
-                {
-                    if (path.Any(n => n.Y == y && n.X == x))
-                    {
-                        s.Append("_");
-                    }
-                    else
-                    {
-                        s.Append(world[y, x]);
-                    }
-                    s.Append(' ');
-                }
-                s.Append(Environment.NewLine);
-            }
-            return s.ToString();
-        }
-
-        public static string PrintPath(WorldGrid world, Vector2Int[] path, bool appendSpace = true)
-        {
-            var s = new StringBuilder();
-
-            for(var y = 0; y < world.Height; y++) {
-                for(var x = 0; x < world.Width; x++) {
-                    if(path.Any(n => n.y == y && n.x == x)) {
-                        s.Append("_");
-                    }
-                    else {
-                        s.Append(world[y, x]);
-                    }
-                    s.Append(' ');
-                }
-                s.Append(Environment.NewLine);
-            }
-            return s.ToString();
-        }
-
-        public static void Print(WorldGrid world, Position[] path)
+        public static void Print(WorldGrid world, Vector2Int[] path)
         {
             Console.WriteLine(PrintGrid(world));
             Console.WriteLine(Environment.NewLine);
@@ -103,44 +60,16 @@ namespace AStar.Tests
             PrintAssertions(path);
         }
 
-        public static void Print(WorldGrid world, Point[] path)
-        {
-            Print(world, path.Select(p => p.ToPosition()).ToArray());
-        }
-
-        public static void Print(WorldGrid world, Vector2Int[] path)
-        {
-            Print(world, path.Select(p => p.ToPosition()).ToArray());
-        }
-
-        public static void PrintAssertions(Position[] path)
+        public static void PrintAssertions(Vector2Int[] path)
         {
             StringBuilder s = new StringBuilder();
             s.AppendLine("path.ShouldBe(new[] {");
             foreach (var position in path)
             {
-                s.AppendLine($"new Position({position.Row}, {position.Column}),");
+                s.AppendLine($"new Position({position.y}, {position.x}),");
             }
             s.AppendLine("});");
             Console.WriteLine(s.ToString());
-        }
-        
-        public static void PrintAssertions(Vector2Int[] path)
-        {
-            for (var i = 0; i < path.Length; i++)
-            {
-                Console.WriteLine($"path[{i}].X.ShouldBe({path[i].x});");
-                Console.WriteLine($"path[{i}].Y.ShouldBe({path[i].y});");
-            }
-        }
-
-        public static void PrintAssertions(Point[] path)
-        {
-            for (var i = 0; i < path.Length; i++)
-            {
-                Console.WriteLine($"path[{i}].X.ShouldBe({path[i].X});");
-                Console.WriteLine($"path[{i}].Y.ShouldBe({path[i].Y});");
-            }
         }
 
         public static WorldGrid ConvertStringToPathfinderGrid(string level)
