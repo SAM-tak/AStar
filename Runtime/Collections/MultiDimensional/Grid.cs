@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using UnityEngine;
 
 namespace AStar.Collections.MultiDimensional
 {
@@ -54,6 +55,17 @@ namespace AStar.Collections.MultiDimensional
             }
         }
 
+        public T this[Vector2Int point]
+        {
+            get
+            {
+                return this[point.ToPosition()];
+            }
+            set
+            {
+                this[point.ToPosition()] = value;
+            }
+        }
         public T this[Point point]
         {
             get

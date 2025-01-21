@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using UnityEngine;
 using AStar.Collections.PathFinder;
 using AStar.Heuristics;
 using AStar.Options;
@@ -15,6 +16,7 @@ namespace AStar
         private readonly PathFinderOptions _options;
         private readonly WorldGrid _world;
         private readonly ICalculateHeuristic _heuristic;
+        private readonly Stack<Position> _path = new(256);
 
         public PathFinder(WorldGrid worldGrid, PathFinderOptions pathFinderOptions = null)
         {
@@ -30,12 +32,22 @@ namespace AStar
         /// <param name="start">start position</param>
         /// <param name="end">target position</param>
         /// <returns>An array of points from the start to end points or empty[] if unreachable</returns>
-        public Point[] FindPath(Point start, Point end)
-        {
-            return FindPath(new Position(start.Y, start.X), new Position(end.Y, end.X))
-                .Select(position => new Point(position.Column, position.Row))
+        public Vector2Int[] FindPath(Vector2Int start, Vector2Int end)
+            => FindPathAsEnumerable(start.ToPosition(), end.ToPosition())
+                .Select(position => position.ToVector2Int())
                 .ToArray();
-        }
+
+        /// <summary>
+        /// Determines a path between 2 positions where the point's X
+        /// represents the column and the point's Y represents the row
+        /// </summary>
+        /// <param name="start">start position</param>
+        /// <param name="end">target position</param>
+        /// <returns>An array of points from the start to end points or empty[] if unreachable</returns>
+        public Point[] FindPath(Point start, Point end)
+            => FindPathAsEnumerable(start.ToPosition(), end.ToPosition())
+                .Select(position => position.ToPoint())
+                .ToArray();
 
         /// <summary>
         /// Determines a path between 2 positions
@@ -43,7 +55,15 @@ namespace AStar
         /// <param name="start">start/current position</param>
         /// <param name="end">target position</param>
         /// <returns>An array of positions from the start to end position or empty[] if unreachable</returns>
-        public Position[] FindPath(Position start, Position end)
+        public Position[] FindPath(Position start, Position end) => FindPathAsEnumerable(start, end).ToArray();
+
+        /// <summary>
+        /// Determines a path between 2 positions
+        /// </summary>
+        /// <param name="start">start/current position</param>
+        /// <param name="end">target position</param>
+        /// <returns>Enumerable object of positions from the start to end position</returns>
+        public IEnumerable<Position> FindPathAsEnumerable(Position start, Position end)
         {
             var nodesVisited = 0;
             IModelAGraph<PathFinderNode> graph = new PathFinderGraph(_world.Height, _world.Width, _options.UseDiagonals);
@@ -57,12 +77,17 @@ namespace AStar
                 
                 if (q.Position == end)
                 {
-                    return OrderClosedNodesAsArray(graph, q);
+                    OrderClosedNodes(graph, q);
+                    foreach(var i in _path)
+                    {
+                        yield return i;
+                    }
+                    yield break;
                 }
 
                 if (nodesVisited > _options.SearchLimit)
                 {
-                    return new Position[0];
+                    yield break;
                 }
 
                 foreach (var successor in graph.GetSuccessors(q))
@@ -107,8 +132,6 @@ namespace AStar
 
                 nodesVisited++;
             }
-
-            return new Position[0];
         }
 
         private int CalculateModifierToG(PathFinderNode q, PathFinderNode successor, Position end)
@@ -171,21 +194,18 @@ namespace AStar
                 (currentSuccessor.HasBeenVisited && updateSuccessor.F < currentSuccessor.F);
         }
 
-        private static Position[] OrderClosedNodesAsArray(IModelAGraph<PathFinderNode> graph, PathFinderNode endNode)
+        private void OrderClosedNodes(IModelAGraph<PathFinderNode> graph, PathFinderNode endNode)
         {
-            var path = new Stack<Position>();
-
+            _path.Clear();
             var currentNode = endNode;
 
             while (currentNode.Position != currentNode.ParentNodePosition)
             {
-                path.Push(currentNode.Position);
+                _path.Push(currentNode.Position);
                 currentNode = graph.GetParent(currentNode);
             }
 
-            path.Push(currentNode.Position);
-
-            return path.ToArray();
+            _path.Push(currentNode.Position);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Linq;
+using UnityEngine;
 using NUnit.Framework;
 
 namespace AStar.Tests
@@ -76,7 +77,27 @@ namespace AStar.Tests
             Assert.That(grid[new Point(1, 1)], Is.EqualTo((short)5));
             Assert.That(grid[new Point(2, 1)], Is.EqualTo((short)6));
         }
-        
+
+        [Test]
+        public void ShouldReadAndWriteByVector2Int()
+        {
+            var grid = new WorldGrid(2, 3);
+
+            grid[new Position(0, 0)] = 1;
+            grid[new Position(0, 1)] = 2;
+            grid[new Position(0, 2)] = 3;
+            grid[new Position(1, 0)] = 4;
+            grid[new Position(1, 1)] = 5;
+            grid[new Position(1, 2)] = 6;
+
+            Assert.That(grid[new Vector2Int(0, 0)], Is.EqualTo((short)1));
+            Assert.That(grid[new Vector2Int(1, 0)], Is.EqualTo((short)2));
+            Assert.That(grid[new Vector2Int(2, 0)], Is.EqualTo((short)3));
+            Assert.That(grid[new Vector2Int(0, 1)], Is.EqualTo((short)4));
+            Assert.That(grid[new Vector2Int(1, 1)], Is.EqualTo((short)5));
+            Assert.That(grid[new Vector2Int(2, 1)], Is.EqualTo((short)6));
+        }
+
         [Test]
         public void ShouldGetCardinalSuccessorPositions()
         {

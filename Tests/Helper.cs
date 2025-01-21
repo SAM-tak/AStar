@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace AStar.Tests
 {
@@ -73,6 +74,25 @@ namespace AStar.Tests
             return s.ToString();
         }
 
+        public static string PrintPath(WorldGrid world, Vector2Int[] path, bool appendSpace = true)
+        {
+            var s = new StringBuilder();
+
+            for(var y = 0; y < world.Height; y++) {
+                for(var x = 0; x < world.Width; x++) {
+                    if(path.Any(n => n.y == y && n.x == x)) {
+                        s.Append("_");
+                    }
+                    else {
+                        s.Append(world[y, x]);
+                    }
+                    s.Append(' ');
+                }
+                s.Append(Environment.NewLine);
+            }
+            return s.ToString();
+        }
+
         public static void Print(WorldGrid world, Position[] path)
         {
             Console.WriteLine(PrintGrid(world));
@@ -82,8 +102,13 @@ namespace AStar.Tests
             
             PrintAssertions(path);
         }
-        
+
         public static void Print(WorldGrid world, Point[] path)
+        {
+            Print(world, path.Select(p => p.ToPosition()).ToArray());
+        }
+
+        public static void Print(WorldGrid world, Vector2Int[] path)
         {
             Print(world, path.Select(p => p.ToPosition()).ToArray());
         }
@@ -100,12 +125,21 @@ namespace AStar.Tests
             Console.WriteLine(s.ToString());
         }
         
+        public static void PrintAssertions(Vector2Int[] path)
+        {
+            for (var i = 0; i < path.Length; i++)
+            {
+                Console.WriteLine($"path[{i}].X.ShouldBe({path[i].x});");
+                Console.WriteLine($"path[{i}].Y.ShouldBe({path[i].y});");
+            }
+        }
+
         public static void PrintAssertions(Point[] path)
         {
             for (var i = 0; i < path.Length; i++)
             {
-                Console.WriteLine("path[{0}].X.ShouldBe({1});", i, path[i].X);
-                Console.WriteLine("path[{0}].Y.ShouldBe({1});", i, path[i].Y);
+                Console.WriteLine($"path[{i}].X.ShouldBe({path[i].X});");
+                Console.WriteLine($"path[{i}].Y.ShouldBe({path[i].Y});");
             }
         }
 
