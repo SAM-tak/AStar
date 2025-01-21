@@ -8,7 +8,7 @@ using AStar.Options;
 
 namespace AStar
 {
-    public class PathFinder : IFindAPath
+    public class PathFinder
     {
         private const int ClosedValue = 0;
         private const int DistanceBetweenNodes = 1;
@@ -22,16 +22,27 @@ namespace AStar
             _options = pathFinderOptions ?? new PathFinderOptions();
             _heuristic = HeuristicFactory.Create(_options.HeuristicFormula);
         }
-        
-        ///<inheritdoc/>
+
+        /// <summary>
+        /// Determines a path between 2 positions where the point's X
+        /// represents the column and the point's Y represents the row
+        /// </summary>
+        /// <param name="start">start position</param>
+        /// <param name="end">target position</param>
+        /// <returns>An array of points from the start to end points or empty[] if unreachable</returns>
         public Point[] FindPath(Point start, Point end)
         {
             return FindPath(new Position(start.Y, start.X), new Position(end.Y, end.X))
                 .Select(position => new Point(position.Column, position.Row))
                 .ToArray();
         }
-        
-        ///<inheritdoc/>
+
+        /// <summary>
+        /// Determines a path between 2 positions
+        /// </summary>
+        /// <param name="start">start/current position</param>
+        /// <param name="end">target position</param>
+        /// <returns>An array of positions from the start to end position or empty[] if unreachable</returns>
         public Position[] FindPath(Position start, Position end)
         {
             var nodesVisited = 0;

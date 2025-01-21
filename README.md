@@ -5,13 +5,13 @@
 Open Package Manager window and press Add Package from git URL..., enter following path
 
 ```upm
-https://github.com/SAM-tak/CustomUnity.git
+https://github.com/SAM-tak/AStar.git
 ```
 
 or version specifying:
 
 ```upm
-https://github.com/SAM-tak/CustomUnity.git#v1.3.0
+https://github.com/SAM-tak/AStar.git#v1.3.0
 ```
 
 ## About
