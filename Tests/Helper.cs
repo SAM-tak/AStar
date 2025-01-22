@@ -63,10 +63,10 @@ namespace AStar.Tests
         public static void PrintAssertions(Vector2Int[] path)
         {
             StringBuilder s = new StringBuilder();
-            s.AppendLine("path.ShouldBe(new[] {");
+            s.AppendLine("Assert.That(path, Is.EquivalentTo(new[] {");
             foreach (var position in path)
             {
-                s.AppendLine($"new Position({position.y}, {position.x}),");
+                s.AppendLine($"\tnew Vector2Int({position.x}, {position.y}),");
             }
             s.AppendLine("});");
             Console.WriteLine(s.ToString());

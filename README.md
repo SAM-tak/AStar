@@ -1,20 +1,8 @@
 # A 2D A* (A Star) algorithm for Unity C\#
 
-## Install
-
-Open Package Manager window and press Add Package from git URL..., enter following path
-
-```upm
-https://github.com/SAM-tak/AStar.git
-```
-
-or version specifying:
-
-```upm
-https://github.com/SAM-tak/AStar.git#v1.3.0
-```
-
 ## About
+
+**This was abandoned.**
 
 **This is Unity version.** [Origin](https://github.com/valantonini/AStar)
 
